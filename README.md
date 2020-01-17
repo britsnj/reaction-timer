@@ -1,2 +1,3 @@
 # reaction-timer
-6 Month Challenge - Javascript Reaction Timer
+Udemy Complete Web Development 2.0 Course
+Javascrip Section - Reaction Tester Challenge
