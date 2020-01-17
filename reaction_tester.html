@@ -1,130 +1,88 @@
+<!DOCTYPE html>
 <html>
 
     <head>
-    
+        
         <title>Reaction Timer</title>
-        
-        <style type="text/css">
-        
-            #shape {
                 
-                width: 100px;
-                height: 100px;
-                position: relative;
-                
-                
-                                                                          
-            }
-        
-        </style>
     
     </head>
-    
+
     <body>
+    
+        <h1>Test Your Reactions</h1>
+        <p> Click on the boxes and circles as fast as you can</p>
+        <h3>Your time: <span id="time"></span> second(s)</h3>
+        <div id="shape"></div>
         
-        <h1>Test Your Reactions!</h1>
-        
-        <p>Click on the boxes and circles as quickly as you can!</p>
-        
-        <h3 >Your time: <span id="timeTaken"></span></h3>
-        
-            
-        <div id="shape">
-        
-            
-        
-        </div>
         
         <script type="text/javascript">
-            
-            document.getElementById("shape").style.backgroundColor = "red";
+            //Declare global variables
+            var z = 0;
+            var myTimer;
+        
+            //First we generate a random shape with random size, colour and position              
+            function generateShape() {
+                //This section generates the shape's background colour
+                var a = Math.floor(Math.random() * 256);
+                var b = Math.floor(Math.random() * 256);
+                var c = Math.floor(Math.random() * 256);
+                var bgColour = "rgb("+ a + ", " + b + ", " + c + ")";
                 
-            var start = new Date().getTime();
-                            
-            document.getElementById("shape").onclick = function() {
+                //This section randomly chooses from five sizes
+                var sizeChoice = ["50px", "75px", "100px", "150px", "200px"];
+                var size = sizeChoice[Math.floor(Math.random() * 5)];
                 
-                document.getElementById("shape").style.display = "none";
+                //This section generates a top and left offset
+                var topOffset = Math.floor(Math.random() * 500) + "px";
+                var leftOffset = Math.floor(Math.random() * 700) + "px";
                 
-                var end = new Date().getTime();
-                
-                var timeTaken = (end - start)/1000;
-                
-                document.getElementById("timeTaken").innerHTML = timeTaken + "s";
-                
-                setTimeout (restart, Math.random() * 2000);
-                
-                
-                           
-            }
-            
-            function restart () {
-                
-                generateRandomColour ();
-                
-                generateCoordinates ();
-                
-                generateShape ();
-                                                    
-                document.getElementById("shape").style.backgroundColor = color;
-                
-                document.getElementById("shape").style.left = xpos;
-                
-                document.getElementById("shape").style.top = ypos;
-                
-                document.getElementById("shape").style.width = width;
-                
-                document.getElementById("shape").style.height = width;
-                
-                if (checkValue == 0) {
-                    
-                    document.getElementById("shape").style.borderRadius = "50%"; 
+                //This Section creates circle or box
+                var borderChoice = Math.floor(Math.random() * 2);
+                var borderRad = "0%";
+                if (borderChoice == 0){
+                    borderRad = "50%";
                 } else {
-                    
-                    document.getElementById("shape").style.borderRadius = "0";
+                    borderRad = "0%"
                 }
                 
-                document.getElementById("shape").style.display = "block";
-                
-                start = new Date().getTime();
-                
-                        
-                
-            }
-            
-            
-            function generateRandomColour () {
-                
-                color = Math.random() * 16777215;
-                
-                color = Math.floor(color);
-                
-                color = color.toString(16);
-                
-                color = "#" + color;
-            }
-            
-            function generateCoordinates () {
-                
-               xpos = Math.random() * (800 - 0 + 1) + 0;
-               ypos = Math.random() * (400 - 0 + 1) + 0;
-                width = Math.random() * (200 +1) + 100
-        
+                //Change the style of the shape div
+                document.getElementById("shape").style.position = "relative";
+                document.getElementById("shape").style.backgroundColor = bgColour;
+                document.getElementById("shape").style.height = size;
+                document.getElementById("shape").style.width = size;
+                document.getElementById("shape").style.top = topOffset;
+                document.getElementById("shape").style.left = leftOffset;
+                document.getElementById("shape").style.borderRadius = borderRad;
                 
             }
-            
-            function generateShape () {
-                                    
-                checkValue = Math.random() * 2;
-                checkValue = Math.floor(checkValue);
-                                     
-                            
+            //function to start the timer once the shape is generated
+            function startTimer(){
+                myTimer = setInterval(count, 10);
             }
-   
-
-        
-        </script>
-    
-    
+            //function to stop the timer once the shape is clicked
+            function stopTimer(){
+                clearInterval(myTimer);
+            }
+            //internal timer counter
+            function count() {
+                ++z;
+            }
+            //the main gameplay section                
+            function mainGame() {        
+                generateShape(); //generate random shape
+                z = 0; //set timer to zero
+                startTimer(); //start timer
+                          
+                document.getElementById("shape").onclick = function(){
+                stopTimer(); //when shape is clicked stop timer
+                document.getElementById("time").innerHTML = z/100; //write time taken to frontend
+                mainGame(); //restart game              
+                }             
+            }
+            
+            mainGame(); //initial game run             
+            
+        </script>        
     </body>
-
 </html>
